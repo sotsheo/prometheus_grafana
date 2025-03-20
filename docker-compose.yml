@@ -10,6 +10,15 @@ services:
       - "9090:9090"
     restart: always
 
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    restart: unless-stopped
+    ports:
+      - "9093:9093"
+    volumes:
+      - alertmanager_config:/etc/alertmanager
+      - alertmanager_data:/alertmanager
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -25,3 +34,7 @@ services:
     ports:
       - "9100:9100"
     restart: always
+
+volumes:
+  alertmanager_config:
+  alertmanager_data:
