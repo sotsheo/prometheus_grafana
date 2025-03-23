@@ -16,7 +16,7 @@ services:
     ports:
       - "9093:9093"
     volumes:
-      - alertmanager_config:/etc/alertmanager
+      - ./prometheus/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
       - alertmanager_data:/alertmanager
 
   grafana:
@@ -36,5 +36,4 @@ services:
     restart: always
 
 volumes:
-  alertmanager_config:
   alertmanager_data:

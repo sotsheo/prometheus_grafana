@@ -1,0 +1,18 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'telegram'
+
+receivers:
+  - name: 'telegram'
+    telegram_configs:
+      - bot_token: '7845756482:AAHXL9m8iTwOSvAgeiY67PmuvjmOYI8xDBQ'
+        chat_id: 1943348585
+        send_resolved: true
+        message: |
+          🚨 *Prometheus Alert* 🚨
+          *Alert:* {{ .CommonLabels.alertname }}
+          *Severity:* {{ .CommonLabels.severity }}
+          *Description:* {{ .CommonAnnotations.description }}
+          *Instance:* {{ .CommonLabels.instance }}
