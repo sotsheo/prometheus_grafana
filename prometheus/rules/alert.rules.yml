@@ -2,10 +2,11 @@ groups:
   - name: memory_alerts
     rules:
       - alert: HighMemoryUsage
-        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 10
-        for: 2m
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 10  # Sử dụng RAM > 10%
+        for: 2m   # Cảnh báo sau khi điều kiện này xảy ra trong 2 phút liên tiếp
         labels:
-          severity: warning
+          severity: warning   # Mức độ cảnh báo
         annotations:
-          summary: "High Memory Usage"
-          description: "Memory usage is above 10% for more than 2 minutes."
+          summary: "Cảnh báo: Sử dụng RAM cao"
+          description: "Máy chủ {{ $labels.instance }} đang sử dụng RAM trên 10% trong hơn 2 phút."
+
