@@ -19,6 +19,18 @@ receivers:
           *Mức độ:* {{ .CommonLabels.severity }}
           *Máy chủ:* {{ .CommonLabels.instance }}
           *Mô tả:* {{ .CommonAnnotations.description }}
-
+# curl -X POST http://localhost:9093/api/v2/alerts \
+#      -H "Content-Type: application/json" \
+#      -d '[
+#        {
+#          "labels": {
+#            "alertname": "TestAlert",
+#            "severity": "critical"
+#          },
+#          "annotations": {
+#            "description": "Test alert từ Alertmanager"
+#          }
+#        }
+#      ]'
 # templates:
 # - templates/telegram.tmpl
