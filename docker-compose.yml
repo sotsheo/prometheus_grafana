@@ -10,6 +10,8 @@ services:
     ports:
       - "9090:9090"
     restart: always
+    networks:
+      - monitoring
 
   alertmanager:
     image: prom/alertmanager:v0.25.0
@@ -20,6 +22,8 @@ services:
     volumes:
       - ./prometheus/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
       - alertmanager_data:/alertmanager
+    networks:
+      - monitoring
 
   grafana:
     image: grafana/grafana:latest
@@ -29,6 +33,8 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     restart: always
+    networks:
+      - monitoring
 
   node_exporter:
     image: prom/node-exporter:latest
@@ -36,6 +42,12 @@ services:
     ports:
       - "9100:9100"
     restart: always
+    networks:
+      - monitoring
 
 volumes:
   alertmanager_data:
+
+networks:
+  monitoring:
+    driver: bridge
