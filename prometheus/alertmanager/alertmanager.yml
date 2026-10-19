@@ -19,3 +19,6 @@ receivers:
           *Mức độ:* {{ .CommonLabels.severity }}
           *Máy chủ:* {{ .CommonLabels.instance }}
           *Mô tả:* {{ .CommonAnnotations.description }}
+    webhook_configs:
+      - url: 'http://alert_logger:5001/log-alert'
+        send_resolved: true
