@@ -42,14 +42,15 @@ func (rw *responseWriter) Write(b []byte) (int, error) {
 }
 
 type RequestLog struct {
-	Timestamp  string  `json:"timestamp"`
+	Timestamp  string  `json:"@timestamp"`
 	RequestID  string  `json:"request_id"`
+	LogType    string  `json:"log_type"`
 	Method     string  `json:"method"`
 	Path       string  `json:"path"`
 	RemoteAddr string  `json:"remote_addr"`
 	Status     int     `json:"status"`
 	DurationMs float64 `json:"duration_ms"`
-	UserAgent  string  `json:"user_agent"`
+	UserAgent  string  `json:"client_user_agent"`
 	Bytes      int     `json:"bytes"`
 }
 
@@ -84,8 +85,9 @@ func requestLoggerMiddleware(next http.Handler) http.Handler {
 		durationMs := float64(duration.Microseconds()) / 1000.0
 
 		reqLog := RequestLog{
-			Timestamp:  time.Now().Format("2006-01-02 15:04:05"),
+			Timestamp:  time.Now().UTC().Format(time.RFC3339),
 			RequestID:  reqID,
+			LogType:    "request",
 			Method:     r.Method,
 			Path:       r.URL.Path,
 			RemoteAddr: r.RemoteAddr,
@@ -98,7 +100,7 @@ func requestLoggerMiddleware(next http.Handler) http.Handler {
 		writeRequestLog(reqLog)
 
 		fmt.Printf("[REQUEST] %s | req_id=%s | %d | %s %s | %s | %.2fms\n",
-			reqLog.Timestamp, reqID, rw.statusCode, r.Method, r.URL.Path, r.RemoteAddr, durationMs)
+			time.Now().Format("2006-01-02 15:04:05"), reqID, rw.statusCode, r.Method, r.URL.Path, r.RemoteAddr, durationMs)
 	})
 }
 
@@ -163,7 +165,7 @@ func main() {
 
 	handler := requestLoggerMiddleware(mux)
 
-	fmt.Println("🚀 Alert & Request logger server running on :5001")
+	fmt.Println("🚀 Alert & Request logger server running on :5001 (Writing to alerts.log & requests.log)")
 	if err := http.ListenAndServe(":5001", handler); err != nil {
 		fmt.Printf("Server failed to start: %v\n", err)
 	}

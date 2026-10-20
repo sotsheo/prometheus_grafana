@@ -1,0 +1,26 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/app/alerts.log
+    fields:
+      log_type: alert
+    fields_under_root: true
+
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/app/requests.log
+    json.keys_under_root: true
+    json.add_error_key: true
+    fields:
+      log_type: request
+    fields_under_root: true
+
+output.elasticsearch:
+  hosts: ["elasticsearch:9200"]
+  index: "app-logs-%{+yyyy.MM.dd}"
+
+setup.template.name: "app-logs"
+setup.template.pattern: "app-logs-*"
+setup.ilm.enabled: false
