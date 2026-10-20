@@ -6,6 +6,11 @@ groups:
         for: 2m
         labels:
           severity: critical
+          category: infrastructure
+          environment: production
         annotations:
-          summary: "Cảnh báo sử dụng bộ nhớ cao"
-          description: "Sử dụng RAM vượt quá 90% trong hơn 2 phút."
+          summary: "Cảnh báo sử dụng bộ nhớ cao trên {{ $labels.instance }}"
+          description: "Máy chủ {{ $labels.instance }} (IP: {{ $labels.instance }}) đang sử dụng RAM vượt quá 90% trong hơn 2 phút. Mức sử dụng hiện tại: {{ printf \"%.2f\" $value }}%."
+          value: "{{ printf \"%.2f\" $value }}%"
+          runbook_url: "https://wiki.yourdomain.com/runbooks/high-memory-usage"
+          dashboard_url: "https://grafana.yourdomain.com/d/node-exporter/node-exporter-full?var-instance={{ $labels.instance }}"
